@@ -1,11 +1,11 @@
-# WAI - Web AI Interface
+# WAI - Web Agent Interface
 
-WAI (Web AI Interface) is a standardized JSON schema designed to expose public information about a company. The purpose of WAI is to provide AI agents with a consistent, machine-readable interface to gather details about an organization. The JSON file must be served publicly at the following endpoints via GET requests:
+WAI (Web Agent Interface) is a standardized JSON schema designed to expose public information about a company for consumption by various agents (e.g., automated bots, digital assistants, and AI agents). The purpose of WAI is to provide agents with a consistent, machine-readable interface to gather comprehensive details about an organization. This JSON file must be served publicly at the following endpoints via GET requests:
 
 - `http://exampledomain.com/wai`
 - `https://exampledomain.com/wai`
 
-These endpoints allow AI agents and other systems to easily discover and consume company information, as well as to learn about additional capabilities via MCP (Model Context Protocol) contexts.
+These endpoints ensure that agents can easily discover, retrieve, and consume the company's information, as well as learn about additional capabilities via MCP (Model Context Protocol) contexts.
 
 ---
 
@@ -30,21 +30,21 @@ These endpoints allow AI agents and other systems to easily discover and consume
 
 ## Overview
 
-**WAI (Web AI Interface)** defines a JSON structure that presents comprehensive company information. Its design delivers a "business card on steroids" that is both human- and machine-readable, enabling AI agents to quickly obtain insights about an organization.
+**WAI (Web Agent Interface)** defines a JSON structure that presents comprehensive company information in a "business card on steroids" format. The design is both human- and machine-readable, enabling agents to quickly obtain insights about an organization.
 
-For companies with many locations (e.g., McDonald’s), it may be impractical to embed full location details directly in the main JSON file. In such cases, a reference (or redirect) should be provided to an external API endpoint that supplies the full list of locations. This endpoint is included in the **publicAPI** array with a suitable identifier (e.g., "Locations").
+For companies with many physical locations (e.g., global chains like McDonald's), it may be impractical to embed full location details directly in the main JSON file. Instead, a reference (or redirect) should be provided to an external API endpoint that supplies the full list of locations. Such endpoints are included in the **publicAPI** array with appropriate identifiers (e.g., "Locations").
 
-Furthermore, WAI acts as a registry to list available MCP (Model Context Protocol) context files. These MCP JSON files provide detailed instructions to the AI agent on how to perform specific actions (for example, booking a meeting in a calendar).
+Additionally, WAI serves as a registry listing available MCP (Model Context Protocol) context files. These MCP JSON files provide detailed instructions on how to perform specific actions (for example, booking a meeting, processing orders, etc.), enabling agents to extend their functionality seamlessly.
 
 ---
 
 ## Schema Structure
 
-The JSON document is divided into three primary sections:
+The WAI JSON document is divided into three primary sections:
 
-1. **business**: Contains all core details about the company, including its identity, locations (or a summary thereof), and any owned businesses.
-2. **publicAPI**: An array of objects that describe public API endpoints. These endpoints allow consumers to retrieve extended business-related data (e.g., full lists of locations, products, subscriptions).
-3. **mcpContexts**: An array of objects listing available MCP context files. Each object in this array provides an identifier, description, and a fixed URL where the full MCP JSON can be fetched.
+1. **business**: Contains the core company details, including identity, locations (or summaries), and owned businesses.
+2. **publicAPI**: An array of objects that define public endpoints. These endpoints allow agents to retrieve extended business-related data (e.g., full location details, product information, subscriptions).
+3. **mcpContexts**: An array of objects listing the available MCP (Model Context Protocol) contexts. Each object provides an identifier, description, and a fixed URL where the detailed MCP JSON can be fetched.
 
 ---
 
@@ -58,7 +58,7 @@ The `business` object holds the main profile of the company and is organized int
 - **description** (string): A brief overview of the company’s operations.
 - **tagline** (string): A concise slogan or mission statement.
 - **industry** (string): The sector in which the company operates.
-- **keywords** (array of strings): Tags to categorize the business.
+- **keywords** (array of strings): Tags for categorizing the business.
 - **legalName** (string): The registered legal name (if different).
 - **founded** (string): The founding date (preferably in ISO format).
 - **website** (string): The primary website URL.
@@ -70,13 +70,13 @@ The `business` object holds the main profile of the company and is organized int
   - **facebook**
   - **twitter**
   - **linkedin**
-  - *Additional platforms can be added as needed.*
+  - *Additional platforms may be added as needed.*
 
 ### Locations
 
-The company may operate from multiple physical locations. In the JSON file, the `locations` field can include a summary or a few key locations. For companies with a large number of branches, it is recommended to provide a reference to a dedicated API endpoint supplying the full details.
+The company may operate from multiple physical locations. In the main JSON file, the `locations` field can include a summary or a few key locations. For companies with a large number of branches, it is recommended to provide a reference to a dedicated API endpoint that supplies the full details.
 
-Each location object (when included inline) contains:
+Each inline location object contains:
 
 - **name** (string): The location’s designation (e.g., "Main Headquarters", "Downtown Outlet").
 - **type** (string): The category of the location (e.g., `Production`, `Office`, `retail`, `head quarter`, `warehouse`, `laboratory`).
@@ -94,7 +94,7 @@ Each location object (when included inline) contains:
   - **email** (string)
 - **hours** (object): Operating hours for each day of the week.
 
-*Note: For companies with many locations, consider omitting detailed location data from the main JSON and instead provide a "Locations" API endpoint in the **publicAPI** array.*
+*Note: For companies with many locations, consider omitting detailed location data from the main JSON and instead provide a "Locations" API endpoint in the **publicAPI** section.*
 
 ### Owned Businesses
 
@@ -124,21 +124,23 @@ The **publicAPI** field is an array of objects that define public endpoints for 
 - **description** (string): A brief explanation of the endpoint’s purpose.
 - **type** (string): The HTTP method to use (GET, POST, etc.).
 - **endpoint** (string): The URL of the API endpoint.
-- **parameters** (array, optional): A list of parameters that may be used with this endpoint (e.g., pagination parameters, filtering, or submission fields).
+- **parameters** (array, optional): A list of parameters that may be used with this endpoint (e.g., pagination parameters, filters, or data fields).
 
-For example, the "Locations" endpoint may be provided to return the full list of all business locations when there are too many to include inline.
+For example, the "Locations" endpoint may be provided to return a full list of business locations when there are too many to include inline in the main JSON.
 
 ---
 
 ## MCP Contexts
 
-The **mcpContexts** field is an array that lists available MCP (Model Context Protocol) contexts. This section guides AI agents to additional functionality by providing links to detailed MCP JSON files. Each object in this array includes:
+The **mcpContexts** field is an array that lists available MCP (Model Context Protocol) context files. These MCP JSON files provide detailed instructions to agents for performing specific actions, such as booking a meeting or processing an order.
+
+Each MCP context object includes:
 
 - **name** (string): A short identifier for the MCP context (e.g., "Calendar Booking").
-- **description** (string): A summary of the capability provided by the MCP context.
-- **mcpUrl** (string): The fixed URL where the MCP JSON file is located (for example: `https://exampledomain.com/mcp/calendar-booking.json`).
+- **description** (string): A summary of the capability provided by this context.
+- **mcpUrl** (string): The fixed URL where the MCP JSON file is located (e.g., `https://exampledomain.com/mcp/calendar-booking.json`).
 
-This structure serves as a registry or directory, so agents know where to go for extra actions like booking meetings, processing orders, etc.
+This registry allows agents to quickly identify and fetch the context they need for executing specific actions.
 
 ---
 
@@ -268,12 +270,12 @@ Below is an example JSON document for WAI that integrates all sections, includin
   "mcpContexts": [
     {
       "name": "Calendar Booking",
-      "description": "Allows AI agents to check availability and book meetings via our calendar API.",
+      "description": "Allows agents to check availability and book meetings via our calendar API.",
       "mcpUrl": "https://exampledomain.com/mcp/calendar-booking.json"
     },
     {
       "name": "Order Management",
-      "description": "Enables AI agents to place and manage orders via our public ordering system.",
+      "description": "Enables agents to place and manage orders via our public ordering system.",
       "mcpUrl": "https://exampledomain.com/mcp/order-management.json"
     }
   ]
