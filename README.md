@@ -5,7 +5,7 @@ WAI (Web AI Interface) is a standardized JSON schema designed to expose public i
 - `http://exampledomain.com/wai`
 - `https://exampledomain.com/wai`
 
-These endpoints allow AI agents and other systems to easily discover and consume the company information.
+These endpoints allow AI agents and other systems to easily discover and consume company information, as well as to learn about additional capabilities via MCP (Model Context Protocol) contexts.
 
 ---
 
@@ -20,6 +20,7 @@ These endpoints allow AI agents and other systems to easily discover and consume
   - [Owned Businesses](#owned-businesses)
   - [Additional Information](#additional-information)
 - [Public API Endpoints](#public-api-endpoints)
+- [MCP Contexts](#mcp-contexts)
 - [Example JSON](#example-json)
 - [Publishing Your WAI JSON](#publishing-your-wai-json)
 - [Usage Guidelines](#usage-guidelines)
@@ -29,18 +30,21 @@ These endpoints allow AI agents and other systems to easily discover and consume
 
 ## Overview
 
-**WAI (Web AI Interface)** defines a JSON structure that presents comprehensive company information. The design provides a "business card on steroids" that is both human- and machine-readable, enabling AI agents to quickly obtain insights about an organization.
+**WAI (Web AI Interface)** defines a JSON structure that presents comprehensive company information. Its design delivers a "business card on steroids" that is both human- and machine-readable, enabling AI agents to quickly obtain insights about an organization.
 
-For companies with many locations (e.g., McDonald's), it may be impractical to embed full location details directly in the main JSON file. In such cases, a reference (or redirect) should be provided to an external API endpoint that supplies the full list of locations. This endpoint is included in the **publicAPI** array with a single **name** field (e.g., "Locations API").
+For companies with many locations (e.g., McDonald’s), it may be impractical to embed full location details directly in the main JSON file. In such cases, a reference (or redirect) should be provided to an external API endpoint that supplies the full list of locations. This endpoint is included in the **publicAPI** array with a suitable identifier (e.g., "Locations").
+
+Furthermore, WAI acts as a registry to list available MCP (Model Context Protocol) context files. These MCP JSON files provide detailed instructions to the AI agent on how to perform specific actions (for example, booking a meeting in a calendar).
 
 ---
 
 ## Schema Structure
 
-The JSON document is divided into two main sections:
+The JSON document is divided into three primary sections:
 
 1. **business**: Contains all core details about the company, including its identity, locations (or a summary thereof), and any owned businesses.
-2. **publicAPI**: An array of objects that describes public API endpoints. These endpoints allow consumers to retrieve extended business-related data (e.g., a full list of locations, product details, subscriptions).
+2. **publicAPI**: An array of objects that describe public API endpoints. These endpoints allow consumers to retrieve extended business-related data (e.g., full lists of locations, products, subscriptions).
+3. **mcpContexts**: An array of objects listing available MCP context files. Each object in this array provides an identifier, description, and a fixed URL where the full MCP JSON can be fetched.
 
 ---
 
@@ -55,7 +59,7 @@ The `business` object holds the main profile of the company and is organized int
 - **tagline** (string): A concise slogan or mission statement.
 - **industry** (string): The sector in which the company operates.
 - **keywords** (array of strings): Tags to categorize the business.
-- **legalName** (string): The registered legal name (if different from the public name).
+- **legalName** (string): The registered legal name (if different).
 - **founded** (string): The founding date (preferably in ISO format).
 - **website** (string): The primary website URL.
 - **logo** (string): URL to the company’s logo image.
@@ -66,7 +70,7 @@ The `business` object holds the main profile of the company and is organized int
   - **facebook**
   - **twitter**
   - **linkedin**
-  - *Additional platforms as needed.*
+  - *Additional platforms can be added as needed.*
 
 ### Locations
 
@@ -75,8 +79,8 @@ The company may operate from multiple physical locations. In the JSON file, the 
 Each location object (when included inline) contains:
 
 - **name** (string): The location’s designation (e.g., "Main Headquarters", "Downtown Outlet").
-- **type** (string): The category of the location (e.g., `Production`, `Office`, `retail`, `head quarter`, `warehouse`, `laboratory`, etc.).
-- **address** (object): Contains the following:
+- **type** (string): The category of the location (e.g., `Production`, `Office`, `retail`, `head quarter`, `warehouse`, `laboratory`).
+- **address** (object): Contains:
   - **street**
   - **city**
   - **state**
@@ -90,7 +94,7 @@ Each location object (when included inline) contains:
   - **email** (string)
 - **hours** (object): Operating hours for each day of the week.
 
-*Note: For companies with many locations, consider omitting detailed location data from the main JSON and instead provide a "Locations API" endpoint in **publicAPI** that returns full location details.*
+*Note: For companies with many locations, consider omitting detailed location data from the main JSON and instead provide a "Locations" API endpoint in the **publicAPI** array.*
 
 ### Owned Businesses
 
@@ -116,19 +120,31 @@ Companies that own or control other business entities list them in the `ownedBus
 
 The **publicAPI** field is an array of objects that define public endpoints for retrieving extended business-related data. Each object includes:
 
-- **name** (string, optional): A short identifier for the endpoint (e.g., "Locations API").
+- **name** (string, optional): A short identifier for the endpoint (e.g., "Locations", "Products", "Subscribe").
 - **description** (string): A brief explanation of the endpoint’s purpose.
 - **type** (string): The HTTP method to use (GET, POST, etc.).
 - **endpoint** (string): The URL of the API endpoint.
-- **parameters** (array, optional): A list of parameters that may be used with this endpoint (e.g., pagination parameters or submission fields).
+- **parameters** (array, optional): A list of parameters that may be used with this endpoint (e.g., pagination parameters, filtering, or submission fields).
 
-For example, a "Locations API" endpoint may be provided to return the full list of all business locations when they are too many to embed in the main JSON.
+For example, the "Locations" endpoint may be provided to return the full list of all business locations when there are too many to include inline.
+
+---
+
+## MCP Contexts
+
+The **mcpContexts** field is an array that lists available MCP (Model Context Protocol) contexts. This section guides AI agents to additional functionality by providing links to detailed MCP JSON files. Each object in this array includes:
+
+- **name** (string): A short identifier for the MCP context (e.g., "Calendar Booking").
+- **description** (string): A summary of the capability provided by the MCP context.
+- **mcpUrl** (string): The fixed URL where the MCP JSON file is located (for example: `https://exampledomain.com/mcp/calendar-booking.json`).
+
+This structure serves as a registry or directory, so agents know where to go for extra actions like booking meetings, processing orders, etc.
 
 ---
 
 ## Example JSON
 
-Below is an example JSON document for WAI:
+Below is an example JSON document for WAI that integrates all sections, including MCP contexts:
 
 ```json
 {
@@ -246,7 +262,19 @@ Below is an example JSON document for WAI:
       "description": "Retrieve full or partial list of all business locations",
       "type": "GET",
       "endpoint": "https://example.com/api/locations",
-      "parameters": ["perPage", "page","latitude","longitude","distance"]
+      "parameters": ["perPage", "page", "latitude", "longitude", "distance"]
+    }
+  ],
+  "mcpContexts": [
+    {
+      "name": "Calendar Booking",
+      "description": "Allows AI agents to check availability and book meetings via our calendar API.",
+      "mcpUrl": "https://exampledomain.com/mcp/calendar-booking.json"
+    },
+    {
+      "name": "Order Management",
+      "description": "Enables AI agents to place and manage orders via our public ordering system.",
+      "mcpUrl": "https://exampledomain.com/mcp/order-management.json"
     }
   ]
 }
