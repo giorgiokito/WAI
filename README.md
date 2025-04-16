@@ -1,3 +1,7 @@
+
+
+![Alt Text](wai-logos/wai-logo-w-800.png)
+
 # WAI - Web Agent Interface
 
 WAI (Web Agent Interface) is a standardized JSON schema designed to expose public information about a company for consumption by various agents (e.g., automated bots, digital assistants, and AI agents). The purpose of WAI is to provide agents with a consistent, machine-readable interface to gather comprehensive details about an organization. This JSON file must be served publicly at the following endpoints via GET requests:
