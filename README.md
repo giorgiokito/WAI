@@ -58,6 +58,8 @@ The `business` object holds the main profile of the company and is organized int
 
 ### Basic Information
 
+- **wai_version** (number): Indicates the version of WAI file used the default number is 1
+- **updated** (string): The string representing MM/DD/YYYY.
 - **name** (string): The official company name.
 - **description** (string): A brief overview of the company’s operations.
 - **tagline** (string): A concise slogan or mission statement.
@@ -91,8 +93,8 @@ Each inline location object contains:
   - **postalCode**
   - **country**
   - **geo** (object):
-    - **lat** (string or number): Latitude.
-    - **lon** (string or number): Longitude.
+    - **latitude** (string or number): Latitude.
+    - **longitude** (string or number): Longitude.
 - **contact** (object, optional): Location-specific contact details:
   - **phone** (string)
   - **email** (string)
@@ -155,6 +157,8 @@ Below is an example JSON document for WAI that integrates all sections, includin
 ```json
 {
   "business": {
+    "wai_version":1,
+    "updated":"04/16/2025",
     "name": "Example Business Inc.",
     "description": "A cutting-edge provider of innovative solutions tailored for digital transformation.",
     "tagline": "Empowering your digital journey",
@@ -180,8 +184,8 @@ Below is an example JSON document for WAI that integrates all sections, includin
           "postalCode": "90001",
           "country": "USA",
           "geo": {
-            "lat": "34.0522",
-            "lon": "-118.2437"
+            "latitude": "34.0522",
+            "longitude": "-118.2437"
           }
         },
         "contact": {
