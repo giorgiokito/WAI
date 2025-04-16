@@ -59,7 +59,7 @@ The `business` object holds the main profile of the company and is organized int
 ### Basic Information
 
 - **wai_version** (number): Indicates the version of WAI file used the default number is 1
-- **updated** (string): The string representing MM/DD/YYYY.
+- **updated** (string): The string representing MM/DD/YYYY when the WAI file last updated.
 - **name** (string): The official company name.
 - **description** (string): A brief overview of the company’s operations.
 - **tagline** (string): A concise slogan or mission statement.
