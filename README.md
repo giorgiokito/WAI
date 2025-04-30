@@ -37,10 +37,8 @@ By centralizing discovery in `/wai`, you streamline onboarding, enable dynamic i
 
 ## Endpoints
 
-\`\`\`txt
-GET /wai           # Returns the full WAI JSON
-GET /wai.json      # Alias for compatibility
-\`\`\`
+- `GET /wai           # Returns the full WAI JSON`
+- `GET /wai.json      # Alias for compatibility`
 
 Additional endpoints (e.g., `/agent/<name>.json`, `/api/...`) are listed inside the WAI payload.
 
@@ -49,8 +47,8 @@ Additional endpoints (e.g., `/agent/<name>.json`, `/api/...`) are listed inside 
 ## Schema Sections
 
 1. **businessInformation** (object)  
-2. **websitePublicAPI** (array)  
-3. **websiteAgentInterfaces** (array)  
+2. **publicAPI** (array)  
+3. **agentInterfaces** (array)  
 
 Each section conforms to a well-defined structure (see details below).
 
@@ -60,7 +58,7 @@ Each section conforms to a well-defined structure (see details below).
 
 The `businessInformation` object holds your organization’s core profile.
 
-\`\`\`yaml
+```yaml
 businessInformation:
   wai_version:      number       # WAI schema version, e.g. 1
   updated:          string       # MM/DD/YYYY when last updated
@@ -83,16 +81,16 @@ businessInformation:
   locations?:       [object]     # Inline locations or omit for large sets
   ownedBusinesses?: [object]
   additional?:      { employees?: number, other?: object }
-\`\`\`
+```
 
 ---
 
-## Website Public API
+## Public API
 
-The `websitePublicAPI` array catalogs your RESTful or HTTP-based endpoints.
+The `publicAPI` array catalogs your RESTful or HTTP-based endpoints.
 
-\`\`\`yaml
-websitePublicAPI:
+```yaml
+publicAPI:
   - endpoint: string            # full URL, e.g. "https://.../api/products"
     type:     string            # e.g. "REST"
     options:
@@ -102,21 +100,21 @@ websitePublicAPI:
           required:    boolean  # true/false
           type:        string   # "string", "integer", etc.
           description?:string  # optional description
-\`\`\`
+```
 
 ---
 
-## Website Agent Interfaces
+## Agent Interfaces
 
-The `websiteAgentInterfaces` array lists agent-facing contexts and services.
+The `agentInterfaces` array lists agent-facing contexts and services.
 
-\`\`\`yaml
-websiteAgentInterfaces:
+```yaml
+agentInterfaces:
   - name:          string       # e.g. "Calendar Booking"
     description:   string       # human-readable summary
     interfaceUrl:  string       # URL to the context/schema JSON
     interfaceType: string       # e.g. "MCP", "A2A", "Event", "Webhook"
-\`\`\`
+```
 
 Supported `interfaceType` values:
 
@@ -129,7 +127,7 @@ Supported `interfaceType` values:
 
 ## Example JSON (`wai.json`)
 
-\`\`\`json
+```json
 {
   "businessInformation": {
     "wai_version": 1,
@@ -153,7 +151,7 @@ Supported `interfaceType` values:
     "additional": { "employees": 150, "other": { "certifications": ["ISO9001", "Tech Innovator Award 2023"] } }
   },
 
-  "websitePublicAPI": [
+  "publicAPI": [
     {
       "endpoint": "https://example.com/api/products",
       "type": "REST",
@@ -178,7 +176,7 @@ Supported `interfaceType` values:
     }
   ],
 
-  "websiteAgentInterfaces": [
+  "agentInterfaces": [
     {
       "name": "Calendar Booking",
       "description": "Check availability and book meetings via our calendar API.",
@@ -211,20 +209,20 @@ Supported `interfaceType` values:
     }
   ]
 }
-\`\`\`
+```
 
 ---
 
 ## Publishing and Usage
 
-1. Place `README.md` and your `wai.json` at the root of your public web server.  
+1. Place your `wai.json` at the root of your public web server.  
 2. Configure your web server to serve them at `/wai` and `/wai.json`.  
-3. Agents simply `GET /wai` to discover everything—no manual docs required.
+3. Agents simply `GET /wai` to discover everything your company want to share, and what action interfaces your website provides.
 
 ---
 
 ## Extensibility
 
-- **Add new APIs** by appending to `websitePublicAPI`.  
-- **Add new agent interfaces** by appending to `websiteAgentInterfaces` with the appropriate `interfaceType`.  
-- **Versioning**: bump `wai_version` and update `updated` when you make breaking changes.  
+- **Add new APIs** by appending to `publicAPI`.  
+- **Add new agent interfaces** by appending to `agentInterfaces` with the appropriate `interfaceType`.  
+- **Versioning**: bump `updated` field and replace the old wai.json file.  
