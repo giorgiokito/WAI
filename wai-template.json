@@ -1,0 +1,128 @@
+{
+  "businessInformation": {
+    "wai_version": 1,
+    "updated": "MM/DD/YYYY",
+    "name": "Your Company Name",
+    "legalName": "Your Legal Entity Name",
+    "description": "A brief description of what your company does.",
+    "tagline": "Your company’s concise slogan",
+    "industry": "Industry Sector",
+    "keywords": ["keyword1", "keyword2", "keyword3"],
+    "founded": "YYYY-MM-DD",
+    "website": "https://yourdomain.com",
+    "logo": "https://yourdomain.com/assets/logo.png",
+    "social": [
+      {
+        "platform": "twitter",
+        "link": "https://twitter.com/yourhandle",
+        "description": "Company Twitter profile"
+      }
+    ],
+    "locations": [
+      {
+        "name": "Main Headquarters",
+        "type": "office",
+        "address": {
+          "street": "123 Main St",
+          "city": "Anytown",
+          "state": "CA",
+          "postalCode": "90001",
+          "country": "USA"
+        },
+        "geo": {
+          "latitude": 34.0522,
+          "longitude": -118.2437
+        },
+        "contact": {
+          "phone": "+1-800-555-0000",
+          "email": "contact@yourdomain.com"
+        },
+        "hours": {
+          "monday": "09:00-17:00",
+          "tuesday": "09:00-17:00",
+          "wednesday": "09:00-17:00",
+          "thursday": "09:00-17:00",
+          "friday": "09:00-17:00",
+          "saturday": "Closed",
+          "sunday": "Closed"
+        }
+      }
+    ],
+    "ownedBusinesses": [
+      {
+        "name": "Subsidiary Co.",
+        "description": "A brief description of the subsidiary.",
+        "website": "https://subsidiary.yourdomain.com",
+        "logo": "https://subsidiary.yourdomain.com/logo.png",
+        "social": [
+          {
+            "platform": "linkedin",
+            "link": "https://linkedin.com/company/subsidiary",
+            "description": "Subsidiary LinkedIn page"
+          }
+        ],
+        "locations": [
+          {
+            "name": "Subsidiary Office",
+            "type": "office",
+            "address": {
+              "street": "456 Side St",
+              "city": "Othertown",
+              "state": "TX",
+              "postalCode": "75001",
+              "country": "USA"
+            },
+            "geo": {
+              "latitude": 32.7767,
+              "longitude": -96.7970
+            },
+            "contact": {
+              "phone": "+1-800-555-1111",
+              "email": "info@subsidiary.yourdomain.com"
+            },
+            "hours": {
+              "monday": "08:00-16:00",
+              "tuesday": "08:00-16:00",
+              "wednesday": "08:00-16:00",
+              "thursday": "08:00-16:00",
+              "friday": "08:00-16:00",
+              "saturday": "Closed",
+              "sunday": "Closed"
+            }
+          }
+        ]
+      }
+    ],
+    "additional": {
+      "employees": 100,
+      "other": {
+        "note": "Any other miscellaneous information"
+      }
+    }
+  },
+  "publicAPI": [
+    {
+      "endpoint": "https://yourdomain.com/api/example",
+      "type": "REST",
+      "options": {
+        "method": "GET",
+        "parameters": [
+          {
+            "name": "param1",
+            "required": false,
+            "type": "string",
+            "description": "Example query parameter"
+          }
+        ]
+      }
+    }
+  ],
+  "agentInterfaces": [
+    {
+      "name": "Example Interface",
+      "description": "An example agent interface for demonstration purposes.",
+      "interfaceUrl": "https://yourdomain.com/agent/example-interface.json",
+      "interfaceType": "MCP"
+    }
+  ]
+}
