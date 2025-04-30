@@ -1,290 +1,230 @@
-
-
 ![Alt Text](wai-logos/wai-logo-w-800.png)
 
 # WAI - Web Agent Interface
 
-WAI (Web Agent Interface) is a standardized JSON schema designed to expose public information about a company for consumption by various agents (e.g., automated bots, digital assistants, and AI agents). The purpose of WAI is to provide agents with a consistent, machine-readable interface to gather comprehensive details about an organization. This JSON file must be served publicly at the following endpoints via GET requests:
+WAI (Web Agent Interface) is a standardized JSON schema designed to expose public information about a company and its agent-facing services for consumption by automated bots, digital assistants, and AI agents. By providing a single, machine-readable `/wai` endpoint, agents can discover, integrate, and subscribe to your organization’s capabilities—whether RESTful APIs, push/event feeds, or agent-to-agent interfaces.
 
-- `http://exampledomain.com/wai`
-- `https://exampledomain.com/wai`
-
-These endpoints ensure that agents can easily discover, retrieve, and consume the company's information, as well as learn about additional capabilities via MCP (Model Context Protocol) contexts.
-
----
-
-## Table of Contents
+This README covers:
 
 - [Overview](#overview)
-- [Schema Structure](#schema-structure)
-- [Business Object](#business-object)
-  - [Basic Information](#basic-information)
-  - [Social Media](#social-media)
-  - [Locations](#locations)
-  - [Owned Businesses](#owned-businesses)
-  - [Additional Information](#additional-information)
-- [Public API Endpoints](#public-api-endpoints)
-- [MCP Contexts](#mcp-contexts)
-- [Example JSON](#example-json)
-- [Publishing Your WAI JSON](#publishing-your-wai-json)
-- [Usage Guidelines](#usage-guidelines)
+- [Endpoints](#endpoints)
+- [Schema Sections](#schema-sections)
+- [Business Information](#business-information)
+- [Website Public API](#website-public-api)
+- [Website Agent Interfaces](#website-agent-interfaces)
+- [Example JSON (`wai.json`)](#example-json-waijson)
+- [Publishing and Usage](#publishing-and-usage)
 - [Extensibility](#extensibility)
 
 ---
 
 ## Overview
 
-**WAI (Web Agent Interface)** defines a JSON structure that presents comprehensive company information in a "business card on steroids" format. The design is both human- and machine-readable, enabling agents to quickly obtain insights about an organization.
+The WAI JSON document must be served publicly at the following endpoints via GET requests:
 
-For companies with many physical locations (e.g., global chains like McDonald's), it may be impractical to embed full location details directly in the main JSON file. Instead, a reference (or redirect) should be provided to an external API endpoint that supplies the full list of locations. Such endpoints are included in the **publicAPI** array with appropriate identifiers (e.g., "Locations").
+- `http://<your-domain>/wai`
+- `https://<your-domain>/wai`
 
-Additionally, WAI serves as a registry listing available MCP (Model Context Protocol) context files. These MCP JSON files provide detailed instructions on how to perform specific actions (for example, booking a meeting, processing orders, etc.), enabling agents to extend their functionality seamlessly.
+When an agent fetches `/wai`, it receives:
 
----
+1. **Business Information**: Core company details and metadata.  
+2. **Website Public API**: A registry of your REST/HTTP endpoints.  
+3. **Website Agent Interfaces**: Agent-facing capabilities, including event feeds, MCP contexts, and A2A interfaces.
 
-## Schema Structure
-
-The WAI JSON document is divided into three primary sections:
-
-1. **business**: Contains the core company details, including identity, locations (or summaries), and owned businesses.
-2. **publicAPI**: An array of objects that define public endpoints. These endpoints allow agents to retrieve extended business-related data (e.g., full location details, product information, subscriptions).
-3. **mcpContexts**: An array of objects listing the available MCP (Model Context Protocol) contexts. Each object provides an identifier, description, and a fixed URL where the detailed MCP JSON can be fetched.
+By centralizing discovery in `/wai`, you streamline onboarding, enable dynamic integration, and reduce documentation overhead.
 
 ---
 
-## Business Object
+## Endpoints
 
-The `business` object holds the main profile of the company and is organized into several nested sections.
+\`\`\`txt
+GET /wai           # Returns the full WAI JSON
+GET /wai.json      # Alias for compatibility
+\`\`\`
 
-### Basic Information
-
-- **wai_version** (number): Indicates the version of WAI file used the default number is 1
-- **updated** (string): The string representing MM/DD/YYYY when the WAI file last updated.
-- **name** (string): The official company name.
-- **description** (string): A brief overview of the company’s operations.
-- **tagline** (string): A concise slogan or mission statement.
-- **industry** (string): The sector in which the company operates.
-- **keywords** (array of strings): Tags for categorizing the business.
-- **legalName** (string): The registered legal name (if different).
-- **founded** (string): The founding date (preferably in ISO format).
-- **website** (string): The primary website URL.
-- **logo** (string): URL to the company’s logo image.
-
-### Social Media
-
-- **social** (object): Contains URLs for the company’s social profiles. Recommended keys include:
-  - **facebook**
-  - **twitter**
-  - **linkedin**
-  - *Additional platforms may be added as needed.*
-
-### Locations
-
-The company may operate from multiple physical locations. In the main JSON file, the `locations` field can include a summary or a few key locations. For companies with a large number of branches, it is recommended to provide a reference to a dedicated API endpoint that supplies the full details.
-
-Each inline location object contains:
-
-- **name** (string): The location’s designation (e.g., "Main Headquarters", "Downtown Outlet").
-- **type** (string): The category of the location (e.g., `Production`, `Office`, `retail`, `head quarter`, `warehouse`, `laboratory`).
-- **address** (object): Contains:
-  - **street**
-  - **city**
-  - **state**
-  - **postalCode**
-  - **country**
-  - **geo** (object):
-    - **latitude** (string or number): Latitude.
-    - **longitude** (string or number): Longitude.
-- **contact** (object, optional): Location-specific contact details:
-  - **phone** (string)
-  - **email** (string)
-- **hours** (object): Operating hours for each day of the week.
-
-*Note: For companies with many locations, consider omitting detailed location data from the main JSON and instead provide a "Locations" API endpoint in the **publicAPI** section.*
-
-### Owned Businesses
-
-Companies that own or control other business entities list them in the `ownedBusinesses` array. For each subsidiary:
-
-- **name** (string): The subsidiary’s name.
-- **description** (string): A brief overview of the subsidiary.
-- **website** (string): The subsidiary’s website URL.
-- **logo** (string): URL to the subsidiary’s logo image.
-- **social** (object): Social media links for the subsidiary.
-- **locations** (array, optional): Follows the same structure as the main `locations` array.
-- *Additional fields may be added as needed.*
-
-### Additional Information
-
-- **additional** (object): Used for supplementary details:
-  - **employees** (number): Approximate number of employees.
-  - **other** (object): Miscellaneous information (e.g., certifications, awards).
+Additional endpoints (e.g., `/agent/<name>.json`, `/api/...`) are listed inside the WAI payload.
 
 ---
 
-## Public API Endpoints
+## Schema Sections
 
-The **publicAPI** field is an array of objects that define public endpoints for retrieving extended business-related data. Each object includes:
+1. **businessInformation** (object)  
+2. **websitePublicAPI** (array)  
+3. **websiteAgentInterfaces** (array)  
 
-- **name** (string, optional): A short identifier for the endpoint (e.g., "Locations", "Products", "Subscribe").
-- **description** (string): A brief explanation of the endpoint’s purpose.
-- **type** (string): The HTTP method to use (GET, POST, etc.).
-- **endpoint** (string): The URL of the API endpoint.
-- **parameters** (array, optional): A list of parameters that may be used with this endpoint (e.g., pagination parameters, filters, or data fields).
-
-For example, the "Locations" endpoint may be provided to return a full list of business locations when there are too many to include inline in the main JSON.
+Each section conforms to a well-defined structure (see details below).
 
 ---
 
-## MCP Contexts
+## Business Information
 
-The **mcpContexts** field is an array that lists available MCP (Model Context Protocol) context files. These MCP JSON files provide detailed instructions to agents for performing specific actions, such as booking a meeting or processing an order.
+The `businessInformation` object holds your organization’s core profile.
 
-Each MCP context object includes:
-
-- **name** (string): A short identifier for the MCP context (e.g., "Calendar Booking").
-- **description** (string): A summary of the capability provided by this context.
-- **mcpUrl** (string): The fixed URL where the MCP JSON file is located (e.g., `https://exampledomain.com/mcp/calendar-booking.json`).
-
-This registry allows agents to quickly identify and fetch the context they need for executing specific actions.
+\`\`\`yaml
+businessInformation:
+  wai_version:      number       # WAI schema version, e.g. 1
+  updated:          string       # MM/DD/YYYY when last updated
+  name:             string
+  legalName?:       string
+  description:      string
+  tagline?:         string
+  industry?:        string
+  keywords?:        [string]
+  founded?:         string       # ISO date preferred
+  website:          string       # URL
+  logo:             string       # URL
+  social:           [            # multiple social links
+    {
+      platform:     string       # e.g. "twitter"
+      link:         string       # full URL
+      description?: string       # e.g. "company news"
+    }
+  ]
+  locations?:       [object]     # Inline locations or omit for large sets
+  ownedBusinesses?: [object]
+  additional?:      { employees?: number, other?: object }
+\`\`\`
 
 ---
 
-## Example JSON
+## Website Public API
 
-Below is an example JSON document for WAI that integrates all sections, including MCP contexts:
+The `websitePublicAPI` array catalogs your RESTful or HTTP-based endpoints.
 
-```json
+\`\`\`yaml
+websitePublicAPI:
+  - endpoint: string            # full URL, e.g. "https://.../api/products"
+    type:     string            # e.g. "REST"
+    options:
+      method:     string        # "GET", "POST", etc.
+      parameters:
+        - name:        string   # parameter name
+          required:    boolean  # true/false
+          type:        string   # "string", "integer", etc.
+          description?:string  # optional description
+\`\`\`
+
+---
+
+## Website Agent Interfaces
+
+The `websiteAgentInterfaces` array lists agent-facing contexts and services.
+
+\`\`\`yaml
+websiteAgentInterfaces:
+  - name:          string       # e.g. "Calendar Booking"
+    description:   string       # human-readable summary
+    interfaceUrl:  string       # URL to the context/schema JSON
+    interfaceType: string       # e.g. "MCP", "A2A", "Event", "Webhook"
+\`\`\`
+
+Supported `interfaceType` values:
+
+- **MCP**: Model Context Protocol files for structured AI workflows.  
+- **A2A**: Direct agent-to-agent synchronization interfaces.  
+- **Event**: Publish/subscribe event feeds (e.g. fraud alerts).  
+- **Webhook**: HTTP callbacks for real-time handoffs.
+
+---
+
+## Example JSON (`wai.json`)
+
+\`\`\`json
 {
-  "business": {
-    "wai_version":1,
-    "updated":"04/16/2025",
+  "businessInformation": {
+    "wai_version": 1,
+    "updated": "04/16/2025",
     "name": "Example Business Inc.",
+    "legalName": "Example Business Incorporated",
     "description": "A cutting-edge provider of innovative solutions tailored for digital transformation.",
     "tagline": "Empowering your digital journey",
     "industry": "Technology",
     "keywords": ["innovation", "digital", "transformation"],
-    "legalName": "Example Business Incorporated",
     "founded": "2010-05-12",
     "website": "https://www.examplebusiness.com",
     "logo": "https://www.examplebusiness.com/assets/logo.png",
-    "social": {
-      "facebook": "https://facebook.com/examplebusiness",
-      "twitter": "https://twitter.com/examplebiz",
-      "linkedin": "https://linkedin.com/company/examplebusiness"
-    },
-    "locations": [
-      {
-        "name": "Main Headquarters",
-        "type": "head quarter",
-        "address": {
-          "street": "123 Innovation Drive",
-          "city": "Techville",
-          "state": "CA",
-          "postalCode": "90001",
-          "country": "USA",
-          "geo": {
-            "latitude": "34.0522",
-            "longitude": "-118.2437"
-          }
-        },
-        "contact": {
-          "phone": "+1-800-555-1234",
-          "email": "hq@examplebusiness.com"
-        },
-        "hours": {
-          "monday": "09:00-17:00",
-          "tuesday": "09:00-17:00",
-          "wednesday": "09:00-17:00",
-          "thursday": "09:00-17:00",
-          "friday": "09:00-17:00",
-          "saturday": "Closed",
-          "sunday": "Closed"
-        }
-      }
+    "social": [
+      { "platform": "facebook", "link": "https://facebook.com/examplebusiness", "description": "company page" },
+      { "platform": "twitter",  "link": "https://twitter.com/examplebiz",      "description": "product updates" },
+      { "platform": "linkedin", "link": "https://linkedin.com/company/examplebusiness", "description": "corporate profile" }
     ],
-    "ownedBusinesses": [
-      {
-        "name": "Subsidiary One LLC",
-        "description": "A specialized subsidiary focusing on advanced research and innovative product development.",
-        "website": "https://subsidiary1.examplebusiness.com",
-        "logo": "https://subsidiary1.examplebusiness.com/assets/logo.png",
-        "social": {
-          "facebook": "https://facebook.com/subsidiary1",
-          "twitter": "https://twitter.com/subsidiary1"
-        },
-        "locations": [
-          {
-            "name": "Subsidiary One Office",
-            "type": "office",
-            "address": {
-              "street": "789 Research Ave",
-              "city": "Innovation City",
-              "state": "TX",
-              "postalCode": "75001",
-              "country": "USA",
-              "geo": {
-                "lat": "32.7767",
-                "lon": "-96.7970"
-              }
-            },
-            "contact": {
-              "phone": "+1-800-555-6789",
-              "email": "office@subsidiary1.com"
-            },
-            "hours": {
-              "monday": "08:00-16:00",
-              "tuesday": "08:00-16:00",
-              "wednesday": "08:00-16:00",
-              "thursday": "08:00-16:00",
-              "friday": "08:00-16:00",
-              "saturday": "Closed",
-              "sunday": "Closed"
-            }
-          }
+    "locations": [],
+    "ownedBusinesses": [],
+    "additional": { "employees": 150, "other": { "certifications": ["ISO9001", "Tech Innovator Award 2023"] } }
+  },
+
+  "websitePublicAPI": [
+    {
+      "endpoint": "https://example.com/api/products",
+      "type": "REST",
+      "options": {
+        "method": "GET",
+        "parameters": [
+          { "name": "perPage", "required": false, "type": "integer" },
+          { "name": "page",    "required": false, "type": "integer" }
         ]
       }
-    ],
-    "additional": {
-      "employees": 150,
-      "other": {
-        "certifications": ["ISO9001", "Tech Innovator Award 2023"]
+    },
+    {
+      "endpoint": "https://example.com/api/subscribeemail",
+      "type": "REST",
+      "options": {
+        "method": "POST",
+        "parameters": [
+          { "name": "email", "required": true,  "type": "string" },
+          { "name": "phone", "required": false, "type": "string" }
+        ]
       }
     }
-  },
-  "publicAPI": [
-    {
-      "name": "Products",
-      "description": "List of Products",
-      "type": "GET",
-      "endpoint": "https://example.com/api/products",
-      "parameters": ["perPage", "page"]
-    },
-    {
-      "name": "Subscribe",
-      "description": "Receive email news from our products",
-      "type": "POST",
-      "endpoint": "https://example.com/api/subscribeemail",
-      "parameters": ["email", "phone"]
-    },
-    {
-      "name": "Locations",
-      "description": "Retrieve full or partial list of all business locations",
-      "type": "GET",
-      "endpoint": "https://example.com/api/locations",
-      "parameters": ["perPage", "page", "latitude", "longitude", "distance"]
-    }
   ],
-  "mcpContexts": [
+
+  "websiteAgentInterfaces": [
     {
       "name": "Calendar Booking",
-      "description": "Allows agents to check availability and book meetings via our calendar API.",
-      "mcpUrl": "https://exampledomain.com/mcp/calendar-booking.json"
+      "description": "Check availability and book meetings via our calendar API.",
+      "interfaceUrl": "https://exampledomain.com/agent/calendar-booking.json",
+      "interfaceType": "MCP"
     },
     {
       "name": "Order Management",
-      "description": "Enables agents to place and manage orders via our public ordering system.",
-      "mcpUrl": "https://exampledomain.com/mcp/order-management.json"
+      "description": "Place and manage orders via our public ordering system.",
+      "interfaceUrl": "https://exampledomain.com/agent/order-management.json",
+      "interfaceType": "MCP"
+    },
+    {
+      "name": "Inventory Sync",
+      "description": "Agent-to-agent stock synchronization for partner platforms.",
+      "interfaceUrl": "https://exampledomain.com/agent/inventory-sync.json",
+      "interfaceType": "A2A"
+    },
+    {
+      "name": "Live Chat Relay",
+      "description": "Real-time handoff between AI assistant and human chat operator.",
+      "interfaceUrl": "https://exampledomain.com/agent/live-chat-relay.json",
+      "interfaceType": "Webhook"
+    },
+    {
+      "name": "Fraud Alert",
+      "description": "Push notifications of suspicious transactions to security agents.",
+      "interfaceUrl": "https://exampledomain.com/agent/fraud-alert.json",
+      "interfaceType": "Event"
     }
   ]
 }
+\`\`\`
+
+---
+
+## Publishing and Usage
+
+1. Place `README.md` and your `wai.json` at the root of your public web server.  
+2. Configure your web server to serve them at `/wai` and `/wai.json`.  
+3. Agents simply `GET /wai` to discover everything—no manual docs required.
+
+---
+
+## Extensibility
+
+- **Add new APIs** by appending to `websitePublicAPI`.  
+- **Add new agent interfaces** by appending to `websiteAgentInterfaces` with the appropriate `interfaceType`.  
+- **Versioning**: bump `wai_version` and update `updated` when you make breaking changes.  
