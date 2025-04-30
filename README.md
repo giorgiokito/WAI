@@ -82,9 +82,40 @@ businessInformation:
   ownedBusinesses?: [object]
   additional?:      { employees?: number, other?: object }
 ```
-
 ---
 
+## Location Schema
+
+The `locations` array within the `businessInformation` section can include one or more physical places relevant to the business (e.g., headquarters, retail stores, warehouses).
+
+Each location object follows this structure:
+
+```yaml
+locations:
+  - name: string             # e.g. "Main Headquarters"
+    type?: string             # e.g. "office", "retail", "warehouse", "laboratory", "clinic", "restaurant", "club"
+    address:
+      street: string
+      city: string
+      state: string
+      postalCode: string
+      country: string
+    geo:
+      latitude: number       # Decimal degrees (e.g., 37.7749)
+      longitude: number      # Decimal degrees (e.g., -122.4194)
+    contact:
+      phone: string          # Optional
+      email: string          # Optional
+    hours?:
+      monday: string         # e.g. "09:00-17:00"
+      tuesday: string
+      wednesday: string
+      thursday: string
+      friday: string
+      saturday: string
+      sunday: string
+```
+---
 ## Public API
 
 The `publicAPI` array catalogs your RESTful or HTTP-based endpoints.
