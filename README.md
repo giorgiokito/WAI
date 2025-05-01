@@ -106,7 +106,7 @@ locations:
     address:
       street: string
       city: string
-      state: string
+      stateProvince: string
       postalCode: string
       country: string
     geo:
