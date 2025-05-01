@@ -1,7 +1,7 @@
 {
+  "wai_version": 1,
+  "updated": "MM/DD/YYYY",
   "businessInformation": {
-    "wai_version": 1,
-    "updated": "MM/DD/YYYY",
     "name": "Your Company Name",
     "legalName": "Your Legal Entity Name",
     "description": "A brief description of what your company does.",
