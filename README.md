@@ -57,7 +57,7 @@ Each section conforms to a well-defined structure (see details below).
 
 ## Root WAI information
 
-Simple Information about wai schema version used, and when the file was created.
+Information about wai schema version used, and when the file was created.
 
 ```yaml
 wai_version:      number       # WAI schema version, default to 1
