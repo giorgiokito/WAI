@@ -72,15 +72,15 @@ The `businessInformation` object holds your organization’s core profile.
 ```yaml
 businessInformation:
   name:             string
-  legalName?:       string
+  legalName:        string
   description:      string
   tagline?:         string
   industry?:        string
   keywords?:        [string]
   founded?:         string       # ISO date preferred
   website:          string       # URL
-  logo:             string       # URL
-  social:           [            # multiple social links
+  logo?:            string       # URL
+  social?:          [            # multiple social links
     {
       platform:     string       # e.g. "twitter"
       link:         string       # full URL
@@ -88,7 +88,7 @@ businessInformation:
     }
   ]
   locations?:       [object]     # Inline locations or omit for large sets
-  ownedBusinesses?: [object]
+  ownedBusinesses?: [object]     # use a shallow version of the businessInformation, 
   additional?:      { employees?: number, other?: object }
 ```
 ---
@@ -124,6 +124,26 @@ locations:
       saturday: string
       sunday: string
 ```
+---
+## Owned Businesses Schema 
+
+When the company for this WAI file controls or own other companies; this is the place to provide a shallow version of the `businessInformation` schema can be provided as reference. For more details the agent will go to the controlled company website to get the wai file.
+
+The `ownedBusiness` structure can have the following structure, with 4 required fields, rest optional.
+
+```yaml
+  name:             string
+  legalName:        string
+  website:          string       # URL
+  logo:             string       # URL
+  description?:     string
+  tagline?:         string
+  industry?:        string
+  keywords?:        [string]
+  founded?:         string       # ISO date preferred
+
+```
+
 ---
 ## Public API
 
