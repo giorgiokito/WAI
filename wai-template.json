@@ -25,7 +25,7 @@
         "address": {
           "street": "123 Main St",
           "city": "Anytown",
-          "state": "CA",
+          "stateProvince": "CA",
           "postalCode": "90001",
           "country": "USA"
         },
