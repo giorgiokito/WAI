@@ -10,8 +10,8 @@ This README covers:
 - [Endpoints](#endpoints)
 - [Schema Sections](#schema-sections)
 - [Business Information](#business-information)
-- [Website Public API](#website-public-api)
-- [Website Agent Interfaces](#website-agent-interfaces)
+- [Website Public API](#public-api)
+- [Website Agent Interfaces](#agent-interfaces)
 - [Example JSON (`wai.json`)](#example-json-waijson)
 - [Publishing and Usage](#publishing-and-usage)
 - [Extensibility](#extensibility)
@@ -46,6 +46,7 @@ Additional endpoints (e.g., `/agent/<name>.json`, `/api/...`) are listed inside 
 
 ## Schema Sections
 
+0. **WAI Information Key**
 1. **businessInformation** (object)  
 2. **publicAPI** (array)  
 3. **agentInterfaces** (array)  
@@ -54,14 +55,22 @@ Each section conforms to a well-defined structure (see details below).
 
 ---
 
+## Root WAI information
+
+Simple Information about wai schema version used, and when the file was created.
+
+```yaml
+wai_version:      number       # WAI schema version, default to 1
+updated:          string       # MM/DD/YYYY when last updated
+```
+---
+
 ## Business Information
 
 The `businessInformation` object holds your organization’s core profile.
 
 ```yaml
 businessInformation:
-  wai_version:      number       # WAI schema version, e.g. 1
-  updated:          string       # MM/DD/YYYY when last updated
   name:             string
   legalName?:       string
   description:      string
