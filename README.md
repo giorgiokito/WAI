@@ -189,9 +189,10 @@ Supported `interfaceType` values:
 
 ```json
 {
+  "wai_version": 1,
+  "updated": "04/16/2025",
+
   "businessInformation": {
-    "wai_version": 1,
-    "updated": "04/16/2025",
     "name": "Example Business Inc.",
     "legalName": "Example Business Incorporated",
     "description": "A cutting-edge provider of innovative solutions tailored for digital transformation.",
@@ -208,7 +209,8 @@ Supported `interfaceType` values:
     ],
     "locations": [],
     "ownedBusinesses": [],
-    "additional": { "employees": 150, "other": { "certifications": ["ISO9001", "Tech Innovator Award 2023"] } }
+    "additional": { "employees": 150,
+                     "other": { "certifications": ["ISO9001", "Tech Innovator Award 2023"] } }
   },
 
   "publicAPI": [
