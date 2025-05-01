@@ -112,10 +112,13 @@ locations:
     geo:
       latitude: number       # Decimal degrees (e.g., 37.7749)
       longitude: number      # Decimal degrees (e.g., -122.4194)
-    contact:
-      phone: string          # Optional
-      email: string          # Optional
-    hours?:
+    contacts: [
+      {
+        type:    string      # Phone, email, fax, email, 
+        value:   string      # full qualifying number or address, Phone # must include country code within parentesys i.e.(+1)
+        name:    string      # Name or description of the contact, i.e. Sales, Support, Etc...
+    ]
+    hours?:                  
       monday: string         # e.g. "09:00-17:00"
       tuesday: string
       wednesday: string
@@ -123,6 +126,13 @@ locations:
       friday: string
       saturday: string
       sunday: string
+    holidays:[
+      {
+        name:            string     # Publicly known and recognized holidays, i.e.  
+        fromDate?:       string     # MM/DD if an holiday is not fixed on a date, leave this blank.
+        number_of_days?: number     # Number of days from the stated day. 
+      }
+    ]  
 ```
 ---
 ## Owned Businesses Schema 
