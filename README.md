@@ -75,7 +75,7 @@ businessInformation:
   legalName:        string
   description:      string
   tagline?:         string
-  industry?:        string
+  industry?:        [string]
   keywords?:        [string]
   founded?:         string       # ISO date preferred
   website:          string       # URL
@@ -117,6 +117,7 @@ locations:
         type:    string      # Phone, email, fax, email, 
         value:   string      # full qualifying number or address, Phone # must include country code within parentesys i.e.(+1)
         name:    string      # Name or description of the contact, i.e. Sales, Support, Etc...
+      }
     ]
     hours?:                  
       monday: string         # e.g. "09:00-17:00"
@@ -207,7 +208,7 @@ Supported `interfaceType` values:
     "legalName": "Example Business Incorporated",
     "description": "A cutting-edge provider of innovative solutions tailored for digital transformation.",
     "tagline": "Empowering your digital journey",
-    "industry": "Technology",
+    "industry": ["Technology","IT","Cloud Solutions"],
     "keywords": ["innovation", "digital", "transformation"],
     "founded": "2010-05-12",
     "website": "https://www.examplebusiness.com",
