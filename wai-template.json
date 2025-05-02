@@ -6,7 +6,7 @@
     "legalName": "Your Legal Entity Name",
     "description": "A brief description of what your company does.",
     "tagline": "Your company’s concise slogan",
-    "industry": "Industry Sector",
+    "industry": ["Industry Sector","Other Related Industry", "More Specific Industry"],
     "keywords": ["keyword1", "keyword2", "keyword3"],
     "founded": "YYYY-MM-DD",
     "website": "https://yourdomain.com",
