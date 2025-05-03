@@ -33,10 +33,18 @@
           "latitude": 34.0522,
           "longitude": -118.2437
         },
-        "contact": {
-          "phone": "+1-800-555-0000",
-          "email": "contact@yourdomain.com"
-        },
+        "contacts": [
+          {  
+            "name":"Mobile",
+            "type":"phone",
+            "value": "(+1)8005550000"
+          },
+          {
+            "name":"Sales",
+            "type":"email",
+            "value":"contact@yourdomain.com"
+          }
+        ],
         "hours": {
           "monday": "09:00-17:00",
           "tuesday": "09:00-17:00",
