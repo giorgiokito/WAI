@@ -140,19 +140,12 @@ locations:
 
 When the company for this WAI file controls or own other companies; this is the place to provide a shallow version of the `businessInformation` schema can be provided as reference. For more details the agent will go to the controlled company website to get the wai file.
 
-The `ownedBusiness` structure can have the following structure, with 4 required fields, rest optional.
+The `ownedBusiness` structure can have the following structure, with 2 required fields.
 
 ```yaml
   name:             string
-  legalName:        string
   website:          string       # URL
-  logo:             string       # URL
   description?:     string
-  tagline?:         string
-  industry?:        string
-  keywords?:        [string]
-  founded?:         string       # ISO date preferred
-
 ```
 
 ---
