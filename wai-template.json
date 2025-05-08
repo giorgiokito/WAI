@@ -61,44 +61,6 @@
         "name": "Subsidiary Co.",
         "description": "A brief description of the subsidiary.",
         "website": "https://subsidiary.yourdomain.com",
-        "logo": "https://subsidiary.yourdomain.com/logo.png",
-        "social": [
-          {
-            "platform": "linkedin",
-            "link": "https://linkedin.com/company/subsidiary",
-            "description": "Subsidiary LinkedIn page"
-          }
-        ],
-        "locations": [
-          {
-            "name": "Subsidiary Office",
-            "type": "office",
-            "address": {
-              "street": "456 Side St",
-              "city": "Othertown",
-              "state": "TX",
-              "postalCode": "75001",
-              "country": "USA"
-            },
-            "geo": {
-              "latitude": 32.7767,
-              "longitude": -96.7970
-            },
-            "contact": {
-              "phone": "+1-800-555-1111",
-              "email": "info@subsidiary.yourdomain.com"
-            },
-            "hours": {
-              "monday": "08:00-16:00",
-              "tuesday": "08:00-16:00",
-              "wednesday": "08:00-16:00",
-              "thursday": "08:00-16:00",
-              "friday": "08:00-16:00",
-              "saturday": "Closed",
-              "sunday": "Closed"
-            }
-          }
-        ]
       }
     ],
     "additional": {
